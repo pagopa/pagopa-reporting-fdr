@@ -33,4 +33,5 @@ and then
 ```
 mvn azure-functions:run
 ```
+> NOTE : build function with `mvn clean package`
 

@@ -24,7 +24,7 @@ import javax.xml.parsers.SAXParserFactory;
  * Azure Functions with Azure Blob trigger.
  */
 public class FlowsParsingFunction {
-    private String storageConnectionString = System.getenv("FLOW_SA_CONNECTION_STRING");
+    private final String storageConnectionString = System.getenv("FLOW_SA_CONNECTION_STRING");
     //private String optionsQueue = System.getenv("OPTIONS_QUEUE");
 
     /**
@@ -58,11 +58,17 @@ public class FlowsParsingFunction {
 
             OptionsService optionsService = this.getOptionsServiceInstance(logger);
 
+            // identificativoPSP##identificativoIntermediarioPSP##identificativoCanale##identificativoDominio##identificativoFlusso##dataOraFlusso.xml
+            // AGID_01##97735020584##97735020584_03##77777777777##2022-01-24GID_01-S003035679##2022-01-24T00:30:49.xml
             String[] flowInfo = name.split("##");
-            String idFlow = flowInfo[0];
-            String dataFlow = flowInfo[1].substring(0,flowInfo[1].length()-4); // remove extension file
-            logger.log(Level.INFO, () -> "Processing flow " + idFlow + " with date " + dataFlow);
-            optionsService.optionsProcessing(handler.getOptions(), idFlow, dataFlow);
+            String identificativoPSP = flowInfo[0];
+            String identificativoIntermediarioPSP = flowInfo[1];
+            String identificativoCanale = flowInfo[2];
+            String identificativoDominio = flowInfo[3];
+            String identificativoFlusso = flowInfo[4];
+            String dataOraFlusso = flowInfo[5].substring(0,flowInfo[5].length()-4); // remove extension file
+            logger.log(Level.INFO, () -> "Processing flow PSP " + identificativoPSP + " flow " + identificativoFlusso + " with date " + dataOraFlusso);
+            optionsService.optionsProcessing(handler.getIdentificativoUnivocoRegolamento(), handler.getDataRegolamento(), handler.getOptions(), identificativoPSP, identificativoIntermediarioPSP, identificativoCanale, identificativoDominio, identificativoFlusso, dataOraFlusso);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             logger.log(Level.INFO, () -> "Processing flow exception: " + e.getMessage());
