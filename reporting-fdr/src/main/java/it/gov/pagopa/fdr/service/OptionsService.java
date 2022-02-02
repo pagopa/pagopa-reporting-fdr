@@ -1,5 +1,6 @@
 package it.gov.pagopa.fdr.service;
 
+import com.ctc.wstx.dom.WstxDOMWrappingReader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -12,24 +13,17 @@ import it.gov.pagopa.fdr.models.BooleanResponseModel;
 import it.gov.pagopa.fdr.models.OptionsMessage;
 import it.gov.pagopa.fdr.models.OptionsReportingModel;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 
 public class OptionsService {
 
     private String storageConnectionString;
     private Logger logger;
-    private int optionsForMessage = 2;
+    private int optionsForMessage = 1;
 
     public OptionsService(String storageConnectionString, Logger logger) {
 
@@ -37,19 +31,50 @@ public class OptionsService {
         this.logger = logger;
     }
 
-    public void optionsProcessing(List<String> options, String idFlow, String dataFlow) throws JsonProcessingException {
+    public void optionsProcessing(String identificativoUnivocoRegolamento,
+                                  String dataRegolamento,
+                                  List<OptionsReportingModel> options,
+                                  String identificativoPSP,
+                                  String identificativoIntermediarioPSP,
+                                  String identificativoCanale,
+                                  String identificativoDominio,
+                                  String identificativoFlusso,
+                                  String dataOraFlusso) throws JsonProcessingException {
 
-        this.logger.log(Level.INFO, "[OptionsService] START options_2_ehub ");
 
-        List<List<String>> partitionOptions = Lists.partition(options, optionsForMessage);
+        this.logger.log(Level.INFO, "[OptionsService] START options_2_ehub for flow " + identificativoFlusso );
+
+        List<List<OptionsReportingModel>> partitionOptions = Lists.partition(options, optionsForMessage);
+
+        this.logger.log(Level.INFO, ">>>>>>>>>>>>> STAR");
+        partitionOptions.stream().forEach(elem -> {
+            this.logger.log(Level.INFO, () -> "[ELEM >>>> ] " + elem);
+        });
+        this.logger.log(Level.INFO, ">>>>>>>>>>>>> END");
 
         OptionsMessage optionsMsg;
         List<String> messages = new ArrayList<>();
-        for (List<String> partitionOption : partitionOptions) {
+        for (List<OptionsReportingModel> partitionOption : partitionOptions) {
             optionsMsg = new OptionsMessage();
-            optionsMsg.setDateFlow(dataFlow);
-            optionsMsg.setIdFlow(idFlow);
-            optionsMsg.setIuvs(partitionOption.stream().toArray(String[]::new));
+            // common header
+            optionsMsg.setIdentificativoPSP(identificativoPSP);
+            optionsMsg.setIdentificativoIntermediarioPSP(identificativoIntermediarioPSP);
+            optionsMsg.setIdentificativoCanale(identificativoCanale);
+            optionsMsg.setIdentificativoDominio(identificativoDominio);
+            optionsMsg.setIdentificativoFlusso(identificativoFlusso);
+            optionsMsg.setDataOraFlusso(dataOraFlusso);
+            // FlussoRiversamento hd
+            optionsMsg.setIdentificativoUnivocoRegolamento(identificativoUnivocoRegolamento);
+            optionsMsg.setDataRegolamento(dataRegolamento);
+            // datiSingoliPagamenti
+            optionsMsg.setIndiceDatiSingoloPagamento(partitionOption.get(0).getIndiceDatiSingoloPagamento());
+            optionsMsg.setIdentificativoUnivocoVersamento(partitionOption.get(0).getIdentificativoUnivocoVersamento());
+            optionsMsg.setIdentificativoUnivocoRiscossione(partitionOption.get(0).getIdentificativoUnivocoRiscossione());
+            optionsMsg.setSingoloImportoPagato(partitionOption.get(0).getSingoloImportoPagato());
+            optionsMsg.setCodiceEsitoSingoloPagamento(partitionOption.get(0).getCodiceEsitoSingoloPagamento());
+            optionsMsg.setDataEsitoSingoloPagamento(partitionOption.get(0).getDataEsitoSingoloPagamento());
+
+            // this.logger.log(Level.INFO, () -> "[OptionsService partitionOption > ] " + partitionOption);
             messages.add(new ObjectMapper().writeValueAsString(optionsMsg));
         }
 
