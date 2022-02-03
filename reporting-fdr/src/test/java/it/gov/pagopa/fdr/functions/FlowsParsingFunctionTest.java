@@ -60,7 +60,7 @@ class FlowsParsingFunctionTest {
         Logger logger = Logger.getLogger("InfoLogging");
         doReturn(optionsService).when(function).getOptionsServiceInstance(logger);
 
-        function.run(file, "idFlow##dataFlow.xml", context);
+        function.run(file, "AGID_01--97735020584--97735020584_03--77777777777--2022-02-02AGID_01-S003035679--2022-02-02T00_30_49.xml", context);
 
         verify(context, times(1)).getLogger();
 

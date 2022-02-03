@@ -60,7 +60,7 @@ public class FlowsParsingFunction {
 
             // identificativoPSP##identificativoIntermediarioPSP##identificativoCanale##identificativoDominio##identificativoFlusso##dataOraFlusso.xml
             // AGID_01##97735020584##97735020584_03##77777777777##2022-01-24GID_01-S003035679##2022-01-24T00:30:49.xml
-            String[] flowInfo = name.split("##");
+            String[] flowInfo = name.split("--");
             String identificativoPSP = flowInfo[0];
             String identificativoIntermediarioPSP = flowInfo[1];
             String identificativoCanale = flowInfo[2];
