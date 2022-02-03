@@ -21,7 +21,7 @@ steps:
     inputs:
       targetType: "inline"
       script: |
-        cd reporting-fdr
+        cd "reporting-fdr"
       failOnStderr: true
 
   - task: Cache@2
