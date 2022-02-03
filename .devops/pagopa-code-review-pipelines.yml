@@ -21,6 +21,7 @@ steps:
     inputs:
       targetType: "inline"
       script: |
+        ls
         cd "$(Build.SourcesDirectory)/reporting-fdr"
       failOnStderr: true
 
