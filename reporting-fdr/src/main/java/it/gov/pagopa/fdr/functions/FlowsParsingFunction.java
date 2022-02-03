@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,7 @@ import it.gov.pagopa.fdr.service.OptionsService;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -40,7 +42,10 @@ public class FlowsParsingFunction {
 
         logger.log(Level.INFO, () -> "Blob Trigger function executed at: " + LocalDateTime.now() + " for blob " + name);
 
-        String converted = new String(content, StandardCharsets.UTF_8);
+
+        String converted_ = new String(content, StandardCharsets.UTF_8);
+
+        String converted= new String(DatatypeConverter.parseBase64Binary(converted_));
 
         logger.log(Level.INFO, () -> converted);
 
