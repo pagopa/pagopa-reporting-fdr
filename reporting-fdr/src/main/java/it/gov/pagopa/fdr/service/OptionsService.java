@@ -1,15 +1,9 @@
 package it.gov.pagopa.fdr.service;
 
-import com.ctc.wstx.dom.WstxDOMWrappingReader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.queue.CloudQueue;
-import com.microsoft.azure.storage.queue.CloudQueueMessage;
 
-import it.gov.pagopa.fdr.models.BooleanResponseModel;
 import it.gov.pagopa.fdr.models.OptionsMessage;
 import it.gov.pagopa.fdr.models.OptionsReportingModel;
 
@@ -46,12 +40,6 @@ public class OptionsService {
 
         List<List<OptionsReportingModel>> partitionOptions = Lists.partition(options, optionsForMessage);
 
-        this.logger.log(Level.INFO, ">>>>>>>>>>>>> STAR");
-        partitionOptions.stream().forEach(elem -> {
-            this.logger.log(Level.INFO, () -> "[ELEM >>>> ] " + elem);
-        });
-        this.logger.log(Level.INFO, ">>>>>>>>>>>>> END");
-
         OptionsMessage optionsMsg;
         List<String> messages = new ArrayList<>();
         for (List<OptionsReportingModel> partitionOption : partitionOptions) {
@@ -74,12 +62,14 @@ public class OptionsService {
             optionsMsg.setCodiceEsitoSingoloPagamento(partitionOption.get(0).getCodiceEsitoSingoloPagamento());
             optionsMsg.setDataEsitoSingoloPagamento(partitionOption.get(0).getDataEsitoSingoloPagamento());
 
-            // this.logger.log(Level.INFO, () -> "[OptionsService partitionOption > ] " + partitionOption);
             messages.add(new ObjectMapper().writeValueAsString(optionsMsg));
         }
 
         this.logger.log(Level.INFO, () -> "[OptionsService] " + options.size() + " flows in " + partitionOptions.size()
                 + "  batch of size " + optionsForMessage);
+
+        EhubSender ehubTx = new EhubSender();
+        ehubTx.publishEvents(messages);
 
         messages.stream().forEach(msg -> {
                 this.logger.log(Level.INFO, () -> "[OptionsService] sent message " + msg);
