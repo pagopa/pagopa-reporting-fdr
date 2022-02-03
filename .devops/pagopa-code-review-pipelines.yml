@@ -17,11 +17,11 @@ variables:
 
 steps:
   - task: Bash@3
-    name: change prj dir
+    name: change_prj_dir
     inputs:
       targetType: "inline"
       script: |
-        cd "reporting-fdr"
+        cd reporting-fdr
       failOnStderr: true
 
   - task: Cache@2
