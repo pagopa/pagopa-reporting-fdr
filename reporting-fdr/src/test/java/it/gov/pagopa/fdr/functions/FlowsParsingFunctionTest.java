@@ -52,7 +52,7 @@ class FlowsParsingFunctionTest {
         when(context.getLogger()).thenReturn(Logger.getLogger("InfoLogging"));
 
         ClassLoader classLoader = getClass().getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream("idflow##dataflow.xml");
+        InputStream inputStream = classLoader.getResourceAsStream("fdr_raw.xml");
         String data = readFromInputStream(inputStream);
 
         byte[] file = data.getBytes();
