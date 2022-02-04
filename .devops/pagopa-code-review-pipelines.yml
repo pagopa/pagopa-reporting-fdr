@@ -16,15 +16,6 @@ variables:
   MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
 
 steps:
-  - task: Bash@3
-    name: change_prj_dir
-    inputs:
-      targetType: "inline"
-      script: |
-        ls
-        cd "$(Build.SourcesDirectory)/reporting-fdr"
-      failOnStderr: true
-
   - task: Cache@2
     inputs:
       key: 'maven | "$(Agent.OS)" | pom.xml'
