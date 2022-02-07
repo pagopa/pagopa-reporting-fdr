@@ -14,18 +14,27 @@ class OptionsMessageTest {
     @Test
     void optionMessageTest() {
 
-        // TODO
+        OptionsMessage optionsMessage = new OptionsMessage();
+        optionsMessage.setIdentificativoFlusso("IdentificativoFlusso");
 
-//        OptionsMessage optionsMessage = new OptionsMessage();
-//        optionsMessage.setIdFlow("idFlow");
-//        optionsMessage.setDateFlow("2015-04-24 11:15:00");
-//
-//        optionsMessage.setIuvs(new String[]{"identificativoUnivocoVersamento1","identificativoUnivocoVersamento2"});
-//
-//        assertNotNull(optionsMessage.getDateFlow());
-//        assertNotNull(optionsMessage.getIdFlow());
-//        assertEquals(2, optionsMessage.getIuvs().length);
-        assertEquals(1,1);
+        optionsMessage.setIdentificativoPSP("IdentificativoPSP");
+        optionsMessage.setIdentificativoIntermediarioPSP("1");
+        optionsMessage.setIdentificativoCanale("2");
+        optionsMessage.setIdentificativoDominio("3");
+        optionsMessage.setIdentificativoFlusso("4");
+        optionsMessage.setDataOraFlusso("5");
+
+        optionsMessage.setIdentificativoUnivocoRegolamento("6");
+        optionsMessage.setDataRegolamento("7");
+        optionsMessage.setIndiceDatiSingoloPagamento("8");
+        optionsMessage.setIdentificativoUnivocoVersamento("9");
+        optionsMessage.setIdentificativoUnivocoRiscossione("10");
+        optionsMessage.setSingoloImportoPagato("11");
+        optionsMessage.setCodiceEsitoSingoloPagamento("12");
+        optionsMessage.setDataEsitoSingoloPagamento("13");
+
+        assertNotNull(optionsMessage.getIdentificativoPSP());
+        assertNotNull(optionsMessage.getDataOraFlusso());
     }
 
 }

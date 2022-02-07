@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +26,6 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class FlowsParsingFunction {
     private final String storageConnectionString = System.getenv("FLOW_SA_CONNECTION_STRING");
-    //private String optionsQueue = System.getenv("OPTIONS_QUEUE");
 
     /**
      * This function will be invoked when a new or updated blob is detected at the
@@ -43,9 +41,9 @@ public class FlowsParsingFunction {
         logger.log(Level.INFO, () -> "Blob Trigger function executed at: " + LocalDateTime.now() + " for blob " + name);
 
 
-        String converted_ = new String(content, StandardCharsets.UTF_8);
+        String convertedStr = new String(content, StandardCharsets.UTF_8);
 
-        String converted= new String(DatatypeConverter.parseBase64Binary(converted_));
+        String converted= new String(DatatypeConverter.parseBase64Binary(convertedStr));
 
         logger.log(Level.INFO, () -> converted);
 
