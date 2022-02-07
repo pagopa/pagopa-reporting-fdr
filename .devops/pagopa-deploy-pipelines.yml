@@ -208,7 +208,7 @@ stages:
               azureSubscription: $(AZURE_SUBSCRIPTION)
               appName: "$(APP_NAME)"
               imageName: "$(dockerNamespace)/$(IMAGE_REPOSITORY):$(pomversion.next)"
-              resourceGroupName: $(BATCH_RESOURCE_GROUP)
+              resourceGroupName: $(RESOURCE_GROUP)
               slotName: production
 
   # Run test
