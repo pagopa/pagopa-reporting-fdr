@@ -71,60 +71,8 @@ public class OptionsService {
         EhubSender ehubTx = new EhubSender();
         ehubTx.publishEvents(messages);
 
-        messages.stream().forEach(msg -> {
-                this.logger.log(Level.INFO, () -> "[OptionsService] sent message " + msg);
-        });
-
-//        try {
-//            CloudQueue queue = CloudStorageAccount.parse(storageConnectionString).createCloudQueueClient()
-//                    .getQueueReference(this.optionsQueue);
-//            queue.createIfNotExists();
-//            this.logger.log(Level.INFO, () -> "[OptionsService] Sending messages ");
-//
-//            messages.stream().forEach(msg -> {
-//                try {
-//                    this.logger.log(Level.INFO, () -> "[OptionsService] sent message " + msg);
-//                    queue.addMessage(new CloudQueueMessage(msg));
-//                } catch (StorageException e) {
-//                    logger.log(Level.INFO, () -> "[OptionsService] sent exception : " + e.getMessage());
-//                }
-//            });
-//
-//        } catch (URISyntaxException | StorageException | InvalidKeyException e) {
-//            this.logger.log(Level.INFO, () -> "[OptionsService] queue exception : " + e.getMessage());
-//        }
+        messages.stream().forEach(msg -> this.logger.log(Level.INFO, () -> "[OptionsService] sent message " + msg));
 
         this.logger.log(Level.INFO, "[OptionsService] END options_2_ehub ");
     }
-
-//    public void callPaymentServiceToReportOption(OptionsMessage options) {
-//
-//        this.logger.log(Level.INFO, () -> "[OptionsService]  call PaymentService to report the options related to flow "
-//                + options.getIdFlow());
-//
-//        BooleanResponseModel response = ClientBuilder.newClient()
-//                .target(this.paymentHost + "/payments/options/reporting").request()
-//                .post(Entity.entity(this.getOptionsReportingModel(options), MediaType.APPLICATION_JSON),
-//                        BooleanResponseModel.class);
-//
-//        if (Boolean.FALSE.equals(response.getResult())) {
-//
-//            throw new IllegalArgumentException("Option reporting error for flow " + options.getIdFlow());
-//        }
-//
-//        this.logger.log(Level.INFO, "[OptionsService] options reported");
-//    }
-
-//    public OptionsReportingModel getOptionsReportingModel(OptionsMessage optionsMessage) {
-//
-//        List<String> notificationCodes = Arrays.asList(optionsMessage.getIuvs()).stream()
-//                .map(iuv -> this.auxDigit + iuv).collect(Collectors.toList());
-//
-//        OptionsReportingModel optionsReportingRequest = new OptionsReportingModel();
-//        optionsReportingRequest.setIdFlow(optionsMessage.getIdFlow());
-//        optionsReportingRequest.setDateFlow(optionsMessage.getDateFlow());
-//        optionsReportingRequest.setNotificationCodes(notificationCodes);
-//
-//        return optionsReportingRequest;
-//    }
 }

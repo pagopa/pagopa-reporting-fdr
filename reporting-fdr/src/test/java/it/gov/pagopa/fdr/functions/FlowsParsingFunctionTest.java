@@ -64,8 +64,7 @@ class FlowsParsingFunctionTest {
 
         verify(context, times(1)).getLogger();
 
-        // TODO
-        //verify(optionsService, times(1)).optionsProcessing(any(), anyString(), anyString());
+        verify(optionsService, times(1)).optionsProcessing( anyString(),  anyString(), any(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
 
     }
 
@@ -73,12 +72,11 @@ class FlowsParsingFunctionTest {
     void getOptionsServiceIstanceTest() throws Exception {
 
         Logger logger = Logger.getLogger("testlogging");
-        // TODO
 
         // test
-        //OptionsService istance = function.getOptionsServiceInstance(logger);
+        OptionsService istance = function.getOptionsServiceInstance(logger);
 
-        //assertNotNull(istance);
+        assertNotNull(istance);
         assert (true);
     }
 }
