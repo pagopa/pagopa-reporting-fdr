@@ -206,8 +206,8 @@ stages:
             displayName: Azure Function Service Deploy
             inputs:
               azureSubscription: $(AZURE_SUBSCRIPTION)
-              appName: "pagopa-d-fn-reportingfdr"
-              imageName: "pagopapacr.azurecr.io/$(IMAGE_REPOSITORY):$(pomversion.next)"
+              appName: "$(APP_NAME)"
+              imageName: "$(dockerNamespace)/$(IMAGE_REPOSITORY):$(pomversion.next)"
               resourceGroupName: $(BATCH_RESOURCE_GROUP)
               slotName: production
 
