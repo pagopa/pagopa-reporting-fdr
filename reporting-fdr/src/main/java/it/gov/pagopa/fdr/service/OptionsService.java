@@ -71,7 +71,7 @@ public class OptionsService {
         EhubSender ehubTx = new EhubSender();
         ehubTx.publishEvents(messages);
 
-        messages.stream().forEach(msg -> this.logger.log(Level.INFO, () -> "[OptionsService] sent message " + msg));
+        // messages.stream().forEach(msg -> this.logger.log(Level.INFO, () -> "[OptionsService] sent message " + msg));
 
         this.logger.log(Level.INFO, "[OptionsService] END options_2_ehub ");
     }
