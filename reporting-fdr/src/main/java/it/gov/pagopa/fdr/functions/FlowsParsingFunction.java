@@ -45,11 +45,11 @@ public class FlowsParsingFunction {
 
         String converted= new String(DatatypeConverter.parseBase64Binary(convertedStr));
 
-        logger.log(Level.INFO, () -> converted);
-
-
+        //logger.log(Level.INFO, () -> converted);
 
         try {
+            logger.log(Level.INFO, () -> "");
+
             SAXParserFactory factory = SAXParserFactory.newInstance();
             // to be compliant, completely disable DOCTYPE declaration:
             factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -61,8 +61,8 @@ public class FlowsParsingFunction {
 
             OptionsService optionsService = this.getOptionsServiceInstance(logger);
 
-            // identificativoPSP##identificativoIntermediarioPSP##identificativoCanale##identificativoDominio##identificativoFlusso##dataOraFlusso.xml
-            // AGID_01##97735020584##97735020584_03##77777777777##2022-01-24GID_01-S003035679##2022-01-24T00:30:49.xml
+            // identificativoPSP--identificativoIntermediarioPSP--identificativoCanale--identificativoDominio--identificativoFlusso--dataOraFlusso.xml
+            // AGID_01--97735020584--97735020584_03--77777777777--2022-01-24GID_01-S003035679--2022-01-24T00:30:49.xml
             String[] flowInfo = name.split("--");
             String identificativoPSP = flowInfo[0];
             String identificativoIntermediarioPSP = flowInfo[1];

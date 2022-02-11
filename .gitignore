@@ -25,3 +25,4 @@ target
 .idea
 *.env.sample.tmp
 local.settings.json.example.tmp
+Results
