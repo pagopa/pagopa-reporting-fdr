@@ -83,7 +83,7 @@ nodoInviaFlussoRendicontazione=`
     <identificativoPSP>AGID_01</identificativoPSP>
     <identificativoIntermediarioPSP>97735020584</identificativoIntermediarioPSP>
     <identificativoCanale>97735020584_03</identificativoCanale>
-    <password>pwdpwdpwd</password>
+    <password>pwd_AgID</password>
     <identificativoDominio>77777777777</identificativoDominio>
     <identificativoFlusso>${identificativoFlusso}</identificativoFlusso>
     <dataOraFlusso>${dataOraFlusso.toISOString().split('.')[0]}</dataOraFlusso>
