@@ -41,7 +41,7 @@ istitutoMittente="AGID_01"
 
 identificativoFlusso = `${dataRegolamento}${istitutoMittente}-S${makeid(9)}`;
 
-numPayments=10;
+const NUM_PAYMENTS = process.env.NUM_PAYMENTS || 100; // default 100 payments
 
 xmlFlusso = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                 <FlussoRiversamento xmlns="http://www.digitpa.gov.it/schemas/2011/Pagamenti/">
@@ -64,12 +64,11 @@ xmlFlusso = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                         </identificativoUnivocoRicevente>
                         <denominazioneRicevente>AGSM ENERGIA S.R.L. SOCIETA' UNIPERSONAL E</denominazioneRicevente>
                     </istitutoRicevente>
-                    <numeroTotalePagamenti>${numPayments}</numeroTotalePagamenti>
-                    <importoTotalePagamenti>${numPayments*100}.00</importoTotalePagamenti>
-                    ${howManyDatiSingoliPagamenti(numPayments,dataRegolamento)}
+                    <numeroTotalePagamenti>${NUM_PAYMENTS}</numeroTotalePagamenti>
+                    <importoTotalePagamenti>${NUM_PAYMENTS*100}.00</importoTotalePagamenti>
+                    ${howManyDatiSingoliPagamenti(NUM_PAYMENTS,dataRegolamento)}
                 </FlussoRiversamento>
         `
-            
 
 //console.log(xmlFlusso);
 xmlFlusso=Buffer.from(xmlFlusso).toString('base64');
@@ -94,10 +93,8 @@ nodoInviaFlussoRendicontazione=`
 </soap:Envelope>
 `
 //console.log(nodoInviaFlussoRendicontazione);
-
-
-require("fs").writeFileSync(`${numPayments}-${identificativoFlusso}.xml`, nodoInviaFlussoRendicontazione);
+let nomeFile=`${NUM_PAYMENTS}-${identificativoFlusso}.xml`
+require("fs").writeFileSync(nomeFile, nodoInviaFlussoRendicontazione);
 //require("fs").writeFileSync(`${identificativoFlusso}-xmlFlusso.xml`, xmlFlusso);
-
-//pm.variables.set('body', nodoInviaFlussoRendicontazione);
+console.log(nomeFile)
 

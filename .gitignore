@@ -26,3 +26,4 @@ target
 *.env.sample.tmp
 local.settings.json.example.tmp
 Results
+.DS_Store
