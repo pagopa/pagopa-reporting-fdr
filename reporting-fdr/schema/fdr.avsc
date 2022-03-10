@@ -1,0 +1,78 @@
+{
+  "name": "FdrRendicontazione",
+  "type": "record",
+  "namespace": "it.pagopa.fdr.model",
+  "fields": [
+    {
+      "name": "identificativoPSP",
+      "type": "string"
+    },
+    {
+      "name": "identificativoIntermediarioPSP",
+      "type": "string"
+    },
+    {
+      "name": "identificativoCanale",
+      "type": "string"
+    },
+    {
+      "name": "identificativoDominio",
+      "type": "string"
+    },
+    {
+      "name": "identificativoFlusso",
+      "type": "string"
+    },
+    {
+      "name": "dataOraFlusso",
+      "type": "int",
+      "logicalType": "date"
+    },
+    {
+      "name": "identificativoUnivocoRegolamento",
+      "type": "string"
+    },
+    {
+      "name": "dataRegolamento",
+      "type": "string"
+    },
+    {
+      "name": "indiceDatiSingoloPagamento",
+      "type": "string"
+    },
+    {
+      "name": "identificativoUnivocoVersamento",
+      "type": "string"
+    },
+    {
+      "name": "identificativoUnivocoRiscossione",
+      "type": "string"
+    },
+    {
+      "name": "singoloImportoPagato",
+      "type": "string"
+    },
+    {
+      "name": "codiceEsitoSingoloPagamento",
+      "type": "string"
+    },
+    {
+      "name": "dataEsitoSingoloPagamento",
+      "type": "string"
+    },
+    {
+      "name": "EventProcessedUtcTime",
+      "type": "int",
+      "logicalType": "date"
+    },
+    {
+      "name": "PartitionId",
+      "type": "int"
+    },
+    {
+      "name": "EventEnqueuedUtcTime",
+      "type": "int",
+      "logicalType": "date"
+    }
+  ]
+}
