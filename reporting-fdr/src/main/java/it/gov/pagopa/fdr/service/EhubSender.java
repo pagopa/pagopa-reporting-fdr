@@ -2,6 +2,8 @@ package it.gov.pagopa.fdr.service;
 
 import com.azure.messaging.eventhubs.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class EhubSender {
@@ -14,7 +16,7 @@ public class EhubSender {
    * Code sample for publishing events.
    * @throws IllegalArgumentException if the EventData is bigger than the max batch size.
    */
-  public void publishEvents(List<String> messages) {
+  public void publishEvents(List<String> messages, Logger logger) {
     // create a producer client
     EventHubProducerClient producer = new EventHubClientBuilder()
             .connectionString(connectionString, eventHubName)
@@ -34,9 +36,12 @@ public class EhubSender {
 
         // Try to add that event that couldn't fit before.
         if (!eventDataBatch.tryAdd(eventData)) {
+          logger.log(Level.SEVERE, () -> "[DebtPositionTableService] Error#1 " + eventData);
           throw new IllegalArgumentException("Event is too large for an empty batch. Max size: "
                   + eventDataBatch.getMaxSizeInBytes());
         }
+      } else {
+        logger.log(Level.SEVERE, () -> "[DebtPositionTableService] Error#2 " + eventData);
       }
     }
     // send the last batch of remaining events

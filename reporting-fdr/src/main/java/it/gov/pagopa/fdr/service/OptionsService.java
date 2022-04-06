@@ -36,7 +36,7 @@ public class OptionsService {
                                   String dataOraFlusso) throws JsonProcessingException {
 
 
-        this.logger.log(Level.INFO, "[OptionsService] START options_2_ehub for flow " + identificativoFlusso + " with " + options.size() + " flows");
+        this.logger.log(Level.INFO, "[OptionsService] START opt2ehub flow " + identificativoFlusso + " with " + options.size() + " flows");
 
         List<List<OptionsReportingModel>> partitionOptions = Lists.partition(options, optionsForMessage);
 
@@ -69,10 +69,10 @@ public class OptionsService {
                 + "  batch of size " + optionsForMessage);
 
         EhubSender ehubTx = new EhubSender();
-        ehubTx.publishEvents(messages);
+        ehubTx.publishEvents(messages, this.logger);
 
         // messages.stream().forEach(msg -> this.logger.log(Level.INFO, () -> "[OptionsService] sent message " + msg));
-        this.logger.log(Level.INFO, "[OptionsService] END options_2_ehub for flow " + identificativoFlusso + " with " + options.size() + " flows");
+        this.logger.log(Level.INFO, "[OptionsService] END opt2ehub flow " + identificativoFlusso + " with " + options.size() + " flows");
 
     }
 }
