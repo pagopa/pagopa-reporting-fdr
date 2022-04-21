@@ -95,6 +95,8 @@ nodoInviaFlussoRendicontazione=`
 //console.log(nodoInviaFlussoRendicontazione);
 let nomeFile=`${NUM_PAYMENTS}-${identificativoFlusso}.xml`
 require("fs").writeFileSync(nomeFile, nodoInviaFlussoRendicontazione);
-//require("fs").writeFileSync(`${identificativoFlusso}-xmlFlusso.xml`, xmlFlusso);
 console.log(nomeFile)
+// only for local debug use
+//let nomeFileOnlyFlow=`${NUM_PAYMENTS}identificativoPSP--identificativoIntermediarioPSP--identificativoCanale--identificativoDominio--${identificativoFlusso}--dataOraFlusso.xml`
+//require("fs").writeFileSync(nomeFileOnlyFlow, xmlFlusso);
 
