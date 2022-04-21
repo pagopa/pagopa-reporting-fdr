@@ -26,6 +26,8 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class FlowsParsingFunction {
     private final String storageConnectionString = System.getenv("FLOW_SA_CONNECTION_STRING");
+    private final String containerBlobOut = System.getenv("OUTPUT_CSV_BLOB");
+    private final String containerBlobIn = System.getenv("FLOWS_XML_BLOB");
 
     /**
      * This function will be invoked when a new or updated blob is detected at the
@@ -45,11 +47,7 @@ public class FlowsParsingFunction {
 
         String converted= new String(DatatypeConverter.parseBase64Binary(convertedStr));
 
-        //logger.log(Level.INFO, () -> converted);
-
         try {
-            logger.log(Level.INFO, () -> "");
-
             SAXParserFactory factory = SAXParserFactory.newInstance();
             // to be compliant, completely disable DOCTYPE declaration:
             factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -73,6 +71,8 @@ public class FlowsParsingFunction {
             logger.log(Level.INFO, () -> "Processing flow PSP " + identificativoPSP + " flow " + identificativoFlusso + " with date " + dataOraFlusso);
             optionsService.optionsProcessing(handler.getIdentificativoUnivocoRegolamento(), handler.getDataRegolamento(), handler.getOptions(), identificativoPSP, identificativoIntermediarioPSP, identificativoCanale, identificativoDominio, identificativoFlusso, dataOraFlusso);
 
+            optionsService.shift2OutFile(name, converted);
+
         } catch (ParserConfigurationException | SAXException | IOException e) {
             logger.log(Level.INFO, () -> "Processing flow exception: " + e.getMessage());
         }
@@ -80,7 +80,7 @@ public class FlowsParsingFunction {
 
     public OptionsService getOptionsServiceInstance(Logger logger) {
 
-        return new OptionsService(this.storageConnectionString, logger);
+        return new OptionsService(this.storageConnectionString, logger, this.containerBlobOut, this.containerBlobIn);
     }
 
 }

@@ -7,6 +7,9 @@ import lombok.Setter;
 @Setter
 public class OptionsMessage {
 
+  private String id;
+  private String version;
+
   private String identificativoPSP;
   private String identificativoIntermediarioPSP;
   private String identificativoCanale;
