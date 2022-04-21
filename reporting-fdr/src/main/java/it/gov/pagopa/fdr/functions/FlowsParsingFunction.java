@@ -26,7 +26,7 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class FlowsParsingFunction {
     private final String storageConnectionString = System.getenv("FLOW_SA_CONNECTION_STRING");
-    private final String containerBlobOut = System.getenv("OUTPUT_CSV_BLOB");
+    private final String containerBlobOut = System.getenv("OUTPUT_BLOB");
     private final String containerBlobIn = System.getenv("FLOWS_XML_BLOB");
 
     /**
