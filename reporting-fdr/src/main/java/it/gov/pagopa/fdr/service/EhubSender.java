@@ -1,16 +1,10 @@
 package it.gov.pagopa.fdr.service;
 
 import com.azure.messaging.eventhubs.*;
-import com.google.common.collect.Lists;
-import com.microsoft.azure.storage.StorageException;
-
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class EhubSender {
   // Event Hubs namespace connection string
@@ -30,23 +24,6 @@ public class EhubSender {
 
     // events in an array
     List<EventData> allEvents = messages.stream().map( e -> new EventData(e)).collect(Collectors.toList());
-
-    // ----- start
-//    int batchSizeDebtPosTable = 100;
-//    List<List<DebtPositionEntity>> partitionDebtPositionEntities = Lists.partition(this.getDebtPositionEntities(fileName, payments), batchSizeDebtPosTable);
-//
-//    // save debt positions partition in table
-//    IntStream.range(0, partitionDebtPositionEntities.size()).forEach(partitionAddIndex -> {
-//      try {
-//        List<DebtPositionEntity> partitionBlock = partitionDebtPositionEntities.get(partitionAddIndex);
-//        this.addDebtPositionEntityList(partitionBlock);
-//        logger.log(Level.INFO, () -> "[CuCsvService] Azure Table Storage - Add for partition index " + partitionAddIndex + " executed.");
-//        savedDebtPositionEntities.addAll(partitionBlock);
-//      } catch (InvalidKeyException | URISyntaxException | StorageException e) {
-//        logger.log(Level.SEVERE, () -> "[CuCsvService] Exception in add Azure Table Storage batch debt position entities: " + e.getMessage() + " " + e.getCause());
-//      }
-//    });
-    // ------ stop
 
     // create a batch
     EventDataBatch eventDataBatch = producer.createBatch();
