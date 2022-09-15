@@ -104,7 +104,7 @@ public class OptionsService {
         BlobContainerClient containerBlobOutClient =
                 blobServiceClient.getBlobContainerClient(this.containerBlobOut);
         BlobClient blobClient = containerBlobOutClient.getBlobClient(csvFileName);
-        blobClient.upload(BinaryData.fromString(content));
+        blobClient.upload(BinaryData.fromString(content), true);
 
         logger.log(Level.INFO, () -> "[OptionsService] move [" + csvFileName + "] in output container");
 

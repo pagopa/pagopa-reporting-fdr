@@ -1,64 +1,225 @@
 {
-  "name": "FdrRendicontazione",
+  "name": "MyClass",
   "type": "record",
-  "namespace": "it.pagopa.fdr.model",
+  "namespace": "com.acme.avro",
   "fields": [
     {
-      "name": "identificativoPSP",
+      "name": "uuid",
       "type": "string"
     },
     {
-      "name": "identificativoIntermediarioPSP",
+      "name": "version",
       "type": "string"
     },
     {
-      "name": "identificativoCanale",
-      "type": "string"
+      "name": "complete",
+      "type": "int"
     },
     {
-      "name": "identificativoDominio",
-      "type": "string"
+      "name": "missingInfo",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
     },
     {
-      "name": "identificativoFlusso",
-      "type": "string"
+      "name": "debtorPosition",
+      "type": {
+        "name": "debtorPosition",
+        "type": "record",
+        "fields": [
+          {
+            "name": "modelType",
+            "type": "string"
+          },
+          {
+            "name": "noticeNumber",
+            "type": "string"
+          },
+          {
+            "name": "iuv",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
-      "name": "dataOraFlusso",
-      "type": "int",
-      "logicalType": "date"
+      "name": "creditor",
+      "type": {
+        "name": "creditor",
+        "type": "record",
+        "fields": [
+          {
+            "name": "idPA",
+            "type": "string"
+          },
+          {
+            "name": "idBrokerPA",
+            "type": "string"
+          },
+          {
+            "name": "idStation",
+            "type": "string"
+          },
+          {
+            "name": "companyName",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
-      "name": "identificativoUnivocoRegolamento",
-      "type": "string"
+      "name": "psp",
+      "type": {
+        "name": "psp",
+        "type": "record",
+        "fields": [
+          {
+            "name": "idPsp",
+            "type": "string"
+          },
+          {
+            "name": "idBrokerPsp",
+            "type": "string"
+          },
+          {
+            "name": "idChannel",
+            "type": "string"
+          },
+          {
+            "name": "psp",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
-      "name": "dataRegolamento",
-      "type": "string"
+      "name": "debtor",
+      "type": {
+        "name": "debtor",
+        "type": "record",
+        "fields": [
+          {
+            "name": "fullName",
+            "type": "string"
+          },
+          {
+            "name": "entityUniqueIdentifierType",
+            "type": "string"
+          },
+          {
+            "name": "entityUniqueIdentifierValue",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
-      "name": "indiceDatiSingoloPagamento",
-      "type": "string"
+      "name": "payer",
+      "type": {
+        "name": "payer",
+        "type": "record",
+        "fields": [
+          {
+            "name": "fullName",
+            "type": "string"
+          },
+          {
+            "name": "entityUniqueIdentifierType",
+            "type": "string"
+          },
+          {
+            "name": "entityUniqueIdentifierValue",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
-      "name": "identificativoUnivocoVersamento",
-      "type": "string"
+      "name": "paymentInfo",
+      "type": {
+        "name": "paymentInfo",
+        "type": "record",
+        "fields": [
+          {
+            "name": "paymentDateTime",
+            "type": "int",
+            "logicalType": "date"
+          },
+          {
+            "name": "applicationDate",
+            "type": "string"
+          },
+          {
+            "name": "transferDate",
+            "type": "string"
+          },
+          {
+            "name": "dueDate",
+            "type": "string"
+          },
+          {
+            "name": "paymentToken",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "int"
+          },
+          {
+            "name": "fee",
+            "type": "int"
+          },
+          {
+            "name": "totalNotice",
+            "type": "int"
+          },
+          {
+            "name": "paymentMethod",
+            "type": "string"
+          },
+          {
+            "name": "touchpoint",
+            "type": "string"
+          },
+          {
+            "name": "remittanceInformation",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
-      "name": "identificativoUnivocoRiscossione",
-      "type": "string"
-    },
-    {
-      "name": "singoloImportoPagato",
-      "type": "string"
-    },
-    {
-      "name": "codiceEsitoSingoloPagamento",
-      "type": "string"
-    },
-    {
-      "name": "dataEsitoSingoloPagamento",
-      "type": "string"
+      "name": "transferList",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "transferList_record",
+          "type": "record",
+          "fields": [
+            {
+              "name": "fiscalCodePA",
+              "type": "string"
+            },
+            {
+              "name": "companyName",
+              "type": "string"
+            },
+            {
+              "name": "amount",
+              "type": "int"
+            },
+            {
+              "name": "transferCategory",
+              "type": "string"
+            },
+            {
+              "name": "remittanceInformation",
+              "type": "string"
+            }
+          ]
+        }
+      }
     },
     {
       "name": "EventProcessedUtcTime",

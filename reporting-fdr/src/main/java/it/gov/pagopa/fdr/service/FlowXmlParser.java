@@ -39,7 +39,9 @@ public class FlowXmlParser extends DefaultHandler {
         // reset the tag value
         currentValue.setLength(0);
 
-        if (qName.equalsIgnoreCase("datiSingoliPagamenti")) {
+        String regexTarget = "^(.*):";
+        String qNameNoNameSpace = qName.replaceAll(regexTarget, "");
+        if (qNameNoNameSpace.equalsIgnoreCase("datiSingoliPagamenti")) {
             option = new OptionsReportingModel();
         }
 
@@ -50,42 +52,44 @@ public class FlowXmlParser extends DefaultHandler {
                            String localName,
                            String qName) {
 
+        String regexTarget = "^(.*):";
+        String qNameNoNameSpace = qName.replaceAll(regexTarget, "");
         // datiSingoliPagamenti
-        if (qName.equalsIgnoreCase("identificativoUnivocoVersamento")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("identificativoUnivocoVersamento")) {
             option.setIdentificativoUnivocoVersamento(currentValue.toString());
         }
 
-        if (qName.equalsIgnoreCase("identificativoUnivocoRiscossione")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("identificativoUnivocoRiscossione")) {
             option.setIdentificativoUnivocoRiscossione(currentValue.toString());
         }
 
-        if (qName.equalsIgnoreCase("indiceDatiSingoloPagamento")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("indiceDatiSingoloPagamento")) {
             option.setIndiceDatiSingoloPagamento(currentValue.toString());
         }
 
-        if (qName.equalsIgnoreCase("singoloImportoPagato")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("singoloImportoPagato")) {
             option.setSingoloImportoPagato(currentValue.toString());
         }
 
-        if (qName.equalsIgnoreCase("codiceEsitoSingoloPagamento")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("codiceEsitoSingoloPagamento")) {
             option.setCodiceEsitoSingoloPagamento(currentValue.toString());
         }
 
-        if (qName.equalsIgnoreCase("dataEsitoSingoloPagamento")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("dataEsitoSingoloPagamento")) {
             option.setDataEsitoSingoloPagamento(currentValue.toString());
         }
         // add
-        if (qName.equalsIgnoreCase("datiSingoliPagamenti")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("datiSingoliPagamenti")) {
             options.add(option);
         }
 
 
         // header
-        if (qName.equalsIgnoreCase("dataRegolamento")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("dataRegolamento")) {
             dataRegolamento = currentValue.toString();
         }
 
-        if (qName.equalsIgnoreCase("identificativoUnivocoRegolamento")) {
+        if (qNameNoNameSpace.equalsIgnoreCase("identificativoUnivocoRegolamento")) {
             identificativoUnivocoRegolamento = currentValue.toString();
         }
 
