@@ -4,7 +4,7 @@
 
     <groupId>it.gov.pagopa.fdr</groupId>
     <artifactId>reporting-fdr</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
 
     <name>Reporting Service</name>
