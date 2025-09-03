@@ -5,6 +5,7 @@ import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 import it.gov.pagopa.fdr.service.HealthCheckService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 import java.util.logging.Level;
@@ -14,12 +15,19 @@ import java.util.logging.Logger;
 /**
  * Azure Functions with Azure Http trigger.
  */
+@Slf4j
 public class Info {
 
-	/**
-	 * This function will be invoked when a Http Trigger occurs
-	 * @return
-	 */
+	private final HealthCheckService healthCheckService;
+
+    public Info(HealthCheckService healthCheckService) {
+        this.healthCheckService = healthCheckService;
+    }
+
+	public Info() {
+		this.healthCheckService = new HealthCheckService();
+	}
+
 	@FunctionName("Info")
 	public HttpResponseMessage run (
 			@HttpTrigger(name = "InfoTrigger",
@@ -28,12 +36,9 @@ public class Info {
 			authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
 			final ExecutionContext context) {
 
-		Logger logger = context.getLogger();
-		HealthCheckService healthCheckService = new HealthCheckService();
-
 		try {
-			boolean isConnected = healthCheckService.checkConnection();
-			logger.log(Level.INFO, "Invoked health check HTTP trigger for pagopa-reporting-fdr.");
+			boolean isConnected = this.healthCheckService.checkConnection();
+			log.info("Invoked health check HTTP trigger for pagopa-reporting-fdr.");
 
 			if(!isConnected) throw new Exception("Health check connection error");
 
@@ -41,7 +46,7 @@ public class Info {
 						   .header("Content-Type", "application/json")
 						   .build();
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, () -> "Health check error: " + e.getLocalizedMessage());
+			log.error("Health check error", e);
 
 			return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
 						   .header("Content-Type", "application/json")

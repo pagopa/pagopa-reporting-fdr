@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import it.gov.pagopa.fdr.models.OptionsMessage;
 import it.gov.pagopa.fdr.models.OptionsReportingModel;
 import it.gov.pagopa.fdr.util.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -24,20 +25,22 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+@Slf4j
 public class OptionsService {
 
-    private String storageConnectionString;
-    private Logger logger;
+    private final String storageConnectionString = System.getenv("FLOW_SA_CONNECTION_STRING");
+    private final String containerBlobOut = System.getenv("OUTPUT_BLOB");
+    private final String containerBlobIn = System.getenv("FLOWS_XML_BLOB");
     private int optionsForMessage = 1;
-    private final String containerBlobOut;
-    private final String containerBlobIn;
 
-    public OptionsService(String storageConnectionString, Logger logger, String containerBlobOut, String containerBlobIn) {
-        this.storageConnectionString = storageConnectionString;
-        this.logger = logger;
-        this.containerBlobIn = containerBlobIn;
-        this.containerBlobOut = containerBlobOut;
+    private final EhubSender ehubTx;
+
+    public OptionsService(EhubSender ehubTx) {
+        this.ehubTx = ehubTx;
+    }
+
+    public OptionsService() {
+        this.ehubTx = new EhubSender();
     }
 
     public void optionsProcessing(String identificativoUnivocoRegolamento,
@@ -49,9 +52,7 @@ public class OptionsService {
                                   String identificativoDominio,
                                   String identificativoFlusso,
                                   String dataOraFlusso) throws JsonProcessingException {
-
-
-        this.logger.log(Level.INFO, "[OptionsService] START opt2ehub flow " + identificativoFlusso + " with " + options.size() + " flows");
+        log.info("[OptionsService] START opt2ehub flow {}} with {} flows", identificativoFlusso, options.size());
 
         List<List<OptionsReportingModel>> partitionOptions = Lists.partition(options, optionsForMessage);
 
@@ -85,16 +86,12 @@ public class OptionsService {
             messages.add(new ObjectMapper().writeValueAsString(optionsMsg));
         }
 
-        this.logger.log(Level.INFO, () -> "[OptionsService] " + options.size() + " flows in " + partitionOptions.size()
-                + "  batch of size " + optionsForMessage);
+        log.info("[OptionsService] {} flows in {} batch of size {}", options.size(),partitionOptions.size(),  optionsForMessage);
 
-        EhubSender ehubTx = new EhubSender();
-        ehubTx.publishEvents(messages, this.logger);
+        this.ehubTx.publishEvents(messages);
 
-        this.logger.log(Level.INFO, "[OptionsService] END opt2ehub flow " + identificativoFlusso + " with " + options.size() + " flows");
-
+        log.info("[OptionsService] END opt2ehub flow {} with {} flows", identificativoFlusso, options.size());
     }
-
 
     public void shift2OutFile(String csvFileName, String content)
             throws FileNotFoundException {
@@ -106,14 +103,14 @@ public class OptionsService {
         BlobClient blobClient = containerBlobOutClient.getBlobClient(csvFileName);
         blobClient.upload(BinaryData.fromString(content), true);
 
-        logger.log(Level.INFO, () -> "[OptionsService] move [" + csvFileName + "] in output container");
+        log.info("[OptionsService] move {} in output container", csvFileName);
 
         // delete blob in INPUT container
         BlobContainerClient containerBlobInClient =
                 blobServiceClient.getBlobContainerClient(this.containerBlobIn);
         BlobClient blobInClient = containerBlobInClient.getBlobClient(csvFileName);
         blobInClient.delete();
-        logger.log(Level.INFO, () -> "[OptionsService] delete [" + csvFileName + "] from in input container");
+        log.info("[OptionsService] delete {} from in input container", csvFileName);
     }
 
 }
