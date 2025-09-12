@@ -27,7 +27,7 @@ steps:
       path: $(MAVEN_CACHE_FOLDER)
     displayName: Cache Maven local repo
 
-  - task: SonarCloudPrepare@1
+  - task: SonarCloudPrepare@7
     displayName: 'Prepare SonarCloud analysis configuration'
     inputs:
       SonarCloud: '$(SONARCLOUD_SERVICE_CONN)'
@@ -38,9 +38,11 @@ steps:
         sonar.projectName=$(SONARCLOUD_PROJECT_NAME)
         sonar.coverage.exclusions=**/config/*,**/*Mock*,**/model/**,**/entity/*
         sonar.cpd.exclusions=**/model/**,**/entity/*
+        sonar.jacoco.reportPaths=**/target/jacoco.exec
+        sonar.coverage.jacoco.xmlReportPaths=**/target/jacoco.xml
       
 
-  - task: Maven@3
+  - task: Maven@4
     displayName: 'Run Junit Test'
     inputs:
       mavenPomFile: 'pom.xml'
@@ -57,8 +59,6 @@ steps:
       effectivePomSkip: false
       isJacocoCoverageReportXML: true
       sqMavenPluginVersionChoice: 'latest'
-      codeCoverageClassFilesDirectories: '**/target/classes'
-      codeCoverageSourceDirectories : '**/src/main/java,**/src/test'
 
   - task: SonarCloudPublish@1
     displayName: 'Publish SonarCloud results on build summary'
