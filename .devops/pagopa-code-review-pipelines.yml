@@ -38,8 +38,6 @@ steps:
         sonar.projectName=$(SONARCLOUD_PROJECT_NAME)
         sonar.coverage.exclusions=**/config/*,**/*Mock*,**/model/**,**/entity/*
         sonar.cpd.exclusions=**/model/**,**/entity/*
-        sonar.jacoco.reportPaths=**/target/jacoco.exec
-        sonar.coverage.jacoco.xmlReportPaths=**/target/jacoco.xml
       
 
   - task: Maven@3
@@ -55,10 +53,6 @@ steps:
       testResultsFiles: '**/surefire-reports/TEST-*.xml'
       goals: 'clean verify'
       sonarQubeRunAnalysis: true
-      codeCoverageToolOption: 'JaCoCo'
-      effectivePomSkip: false
-      isJacocoCoverageReportXML: true
-      sqMavenPluginVersionChoice: 'latest'
 
   - task: SonarCloudPublish@1
     displayName: 'Publish SonarCloud results on build summary'
