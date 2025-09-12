@@ -26,7 +26,7 @@ parameters:
       - True
 
 variables:
-  imageRepository: '$(IMAGE_REPOSITORY_NAME)'
+  imageRepository: '$(IMAGE_REPOSITORY)'
 
   ${{ if eq(parameters['ENV'], 'dev') }}:
     AZURE_SUBSCRIPTION: $(DEV_AZURE_SUBSCRIPTION)
@@ -151,7 +151,7 @@ stages:
             condition: in('${{ parameters.ENV }}', 'dev', 'uat')
             inputs:
               azureSubscription: $(AZURE_SUBSCRIPTION)
-              appName: ${APP_NAME}
+              appName: $(APP_NAME)
               imageName: "${{variables.DOCKER_NAMESPACE}}/${{ variables.imageRepository }}:latest"
               slotName: production
               resourceGroupName: $(RESOURCE_GROUP)
@@ -160,7 +160,7 @@ stages:
             condition: eq('${{ parameters.ENV }}', 'prod')
             inputs:
               azureSubscription: $(AZURE_SUBSCRIPTION)
-              appName: ${APP_NAME}
+              appName: $(APP_NAME)
               imageName: "${{variables.DOCKER_NAMESPACE}}/${{ variables.imageRepository }}:latest"
               deployToSlotOrASE: true
               slotName: staging
@@ -194,7 +194,7 @@ stages:
             displayName: Swapping App Service Deploy
             inputs:
               ConnectedServiceName: $(AZURE_SUBSCRIPTION)
-              WebAppName: ${APP_NAME}
+              WebAppName: $(APP_NAME)
               ResourceGroupName: $(RESOURCE_GROUP)
               SourceSlot: staging
               SwapWithProduction: true
