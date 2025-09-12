@@ -12,21 +12,27 @@ public class EhubSender {
   // Event hub name
   private final String eventHubName = System.getenv("EHUB_FDR_NAME");
 
+  private final EventHubProducerClient producer;
+
+  public EhubSender(EventHubProducerClient producer) {
+    this.producer = producer;
+  }
+
+  public EhubSender() {
+    this.producer =
+        new EventHubClientBuilder()
+            .connectionString(connectionString, eventHubName)
+            .buildProducerClient();
+  }
+
   /**
    * Code sample for publishing events.
    *
    * @throws IllegalArgumentException if the EventData is bigger than the max batch size.
    */
   public void publishEvents(List<String> messages) {
-    // create a producer client
-    EventHubProducerClient producer =
-        new EventHubClientBuilder()
-            .connectionString(connectionString, eventHubName)
-            .buildProducerClient();
-
     // events in an array
-    List<EventData> allEvents =
-        messages.stream().map(EventData::new).collect(Collectors.toList());
+    List<EventData> allEvents = messages.stream().map(EventData::new).collect(Collectors.toList());
 
     // create a batch
     EventDataBatch eventDataBatch = producer.createBatch();
