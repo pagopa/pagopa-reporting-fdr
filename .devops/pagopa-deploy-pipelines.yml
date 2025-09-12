@@ -73,7 +73,7 @@ resources:
     - repository: pagopaCommons
       type: github
       name: pagopa/azure-pipeline-templates
-      ref: refs/tags/v2.10.1
+      ref: refs/tags/v6.17.4
       endpoint: 'io-azure-devops-github-ro'
 
 stages:
@@ -135,6 +135,7 @@ stages:
               DOCKER_IMAGE_TAG: $(current_version)
               FORCE_REPLACE_DOCKER_IMAGE: ${{ parameters.FORCE_REPLACE_DOCKER_IMAGE }}
               DOCKERFILE: "./reporting-fdr/Dockerfile.deploy"
+              DOCKERCONTEXT: "./reporting-fdr"
 
   # Deploy on Azure
   - stage: deploy
