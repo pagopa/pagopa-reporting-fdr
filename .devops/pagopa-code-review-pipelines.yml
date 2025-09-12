@@ -57,6 +57,8 @@ steps:
       effectivePomSkip: false
       isJacocoCoverageReportXML: true
       sqMavenPluginVersionChoice: 'latest'
+      codeCoverageClassFilesDirectories: '**/target/classes'
+      codeCoverageSourceDirectories : '**/src/main/java,**/src/test'
 
   - task: SonarCloudPublish@1
     displayName: 'Publish SonarCloud results on build summary'
