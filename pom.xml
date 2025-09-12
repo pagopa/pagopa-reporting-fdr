@@ -10,7 +10,7 @@
   <description>Fn for PagoPA Fdr</description>
   <packaging>pom</packaging>
   <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
   </properties>
   <modules>
     <module>reporting-fdr</module>
