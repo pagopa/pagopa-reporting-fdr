@@ -27,7 +27,7 @@ steps:
       path: $(MAVEN_CACHE_FOLDER)
     displayName: Cache Maven local repo
 
-  - task: SonarCloudPrepare@7
+  - task: SonarCloudPrepare@1
     displayName: 'Prepare SonarCloud analysis configuration'
     inputs:
       SonarCloud: '$(SONARCLOUD_SERVICE_CONN)'
@@ -42,7 +42,7 @@ steps:
         sonar.coverage.jacoco.xmlReportPaths=**/target/jacoco.xml
       
 
-  - task: Maven@4
+  - task: Maven@3
     displayName: 'Run Junit Test'
     inputs:
       mavenPomFile: 'pom.xml'
