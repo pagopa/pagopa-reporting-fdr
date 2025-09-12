@@ -134,6 +134,7 @@ stages:
               DOCKER_IMAGE_NAME: $(imageRepository)
               DOCKER_IMAGE_TAG: $(current_version)
               FORCE_REPLACE_DOCKER_IMAGE: ${{ parameters.FORCE_REPLACE_DOCKER_IMAGE }}
+              DOCKERFILE: "./reporting-fdr/Dockerfile.deploy"
 
   # Deploy on Azure
   - stage: deploy
