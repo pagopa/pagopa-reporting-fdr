@@ -5,47 +5,50 @@ import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 import it.gov.pagopa.fdr.service.HealthCheckService;
-
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-
-/**
- * Azure Functions with Azure Http trigger.
- */
+/** Azure Functions with Azure Http trigger. */
+@Slf4j
 public class Info {
 
-	/**
-	 * This function will be invoked when a Http Trigger occurs
-	 * @return
-	 */
-	@FunctionName("Info")
-	public HttpResponseMessage run (
-			@HttpTrigger(name = "InfoTrigger",
-			methods = {HttpMethod.GET},
-			route = "info",
-			authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
-			final ExecutionContext context) {
+  private final HealthCheckService healthCheckService;
 
-		Logger logger = context.getLogger();
-		HealthCheckService healthCheckService = new HealthCheckService();
+  public Info(HealthCheckService healthCheckService) {
+    this.healthCheckService = healthCheckService;
+  }
 
-		try {
-			boolean isConnected = healthCheckService.checkConnection();
-			logger.log(Level.INFO, "Invoked health check HTTP trigger for pagopa-reporting-fdr.");
+  public Info() {
+    this.healthCheckService = new HealthCheckService();
+  }
 
-			if(!isConnected) throw new Exception("Health check connection error");
+  @FunctionName("Info")
+  public HttpResponseMessage run(
+      @HttpTrigger(
+              name = "InfoTrigger",
+              methods = {HttpMethod.GET},
+              route = "info",
+              authLevel = AuthorizationLevel.ANONYMOUS)
+          HttpRequestMessage<Optional<String>> request,
+      final ExecutionContext context) {
 
-			return request.createResponseBuilder(HttpStatus.OK)
-						   .header("Content-Type", "application/json")
-						   .build();
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, () -> "Health check error: " + e.getLocalizedMessage());
+    try {
+      boolean isConnected = this.healthCheckService.checkConnection();
+      log.info("Invoked health check HTTP trigger for pagopa-reporting-fdr.");
 
-			return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
-						   .header("Content-Type", "application/json")
-						   .build();
-		}
-	}
+      if (!isConnected) throw new Exception("Health check connection error");
+
+      return request
+          .createResponseBuilder(HttpStatus.OK)
+          .header("Content-Type", "application/json")
+          .build();
+    } catch (Exception e) {
+      log.error("Health check error", e);
+
+      return request
+          .createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+          .header("Content-Type", "application/json")
+          .build();
+    }
+  }
 }

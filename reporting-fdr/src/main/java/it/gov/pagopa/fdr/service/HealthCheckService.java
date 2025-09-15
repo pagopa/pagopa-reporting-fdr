@@ -14,6 +14,11 @@ public class HealthCheckService {
     private final String containerBlobInName = System.getenv("FLOWS_XML_BLOB");
 
     public boolean checkConnection() throws URISyntaxException, StorageException, InvalidKeyException {
+    	
+    	if (storageConnectionString == null || containerBlobInName == null || containerBlobOutName == null) {
+    		return false;
+    	}
+    	
         CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
         CloudBlobContainer containerBlobIn = storageAccount.createCloudBlobClient().getContainerReference(containerBlobInName);
         CloudBlobContainer containerBlobOut = storageAccount.createCloudBlobClient().getContainerReference(containerBlobOutName);
