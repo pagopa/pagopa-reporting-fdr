@@ -2,28 +2,37 @@ package it.gov.pagopa.fdr.service;
 
 import com.azure.messaging.eventhubs.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class EhubSender {
   // Event Hubs namespace connection string
-  private static final String connectionString = System.getenv("EHUB_FDR_CONNECTION_STRING");
+  private final String connectionString = System.getenv("EHUB_FDR_CONNECTION_STRING");
   // Event hub name
-  private static final String eventHubName = System.getenv("EHUB_FDR_NAME");
+  private final String eventHubName = System.getenv("EHUB_FDR_NAME");
+
+  private final EventHubProducerClient producer;
+
+  public EhubSender(EventHubProducerClient producer) {
+    this.producer = producer;
+  }
+
+  public EhubSender() {
+    this.producer =
+        new EventHubClientBuilder()
+            .connectionString(connectionString, eventHubName)
+            .buildProducerClient();
+  }
 
   /**
    * Code sample for publishing events.
+   *
    * @throws IllegalArgumentException if the EventData is bigger than the max batch size.
    */
-  public void publishEvents(List<String> messages, Logger logger) {
-    // create a producer client
-    EventHubProducerClient producer = new EventHubClientBuilder()
-            .connectionString(connectionString, eventHubName)
-            .buildProducerClient();
-
+  public void publishEvents(List<String> messages) {
     // events in an array
-    List<EventData> allEvents = messages.stream().map( e -> new EventData(e)).collect(Collectors.toList());
+    List<EventData> allEvents = messages.stream().map(EventData::new).collect(Collectors.toList());
 
     // create a batch
     EventDataBatch eventDataBatch = producer.createBatch();
@@ -37,8 +46,9 @@ public class EhubSender {
 
         // Try to add that event that couldn't fit before.
         if (!eventDataBatch.tryAdd(eventData)) {
-          logger.log(Level.SEVERE, () -> "[DebtPositionTableService] Error#1 " + eventData);
-          throw new IllegalArgumentException("Event is too large for an empty batch. Max size: "
+          log.error("[DebtPositionTableService] Error#1 {}", eventData);
+          throw new IllegalArgumentException(
+              "Event is too large for an empty batch. Max size: "
                   + eventDataBatch.getMaxSizeInBytes());
         }
       }
