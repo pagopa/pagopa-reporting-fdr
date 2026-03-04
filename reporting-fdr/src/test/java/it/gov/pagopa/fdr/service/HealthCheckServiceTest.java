@@ -18,6 +18,13 @@ class HealthCheckServiceTest {
     void tearDown() {
         if (mockedStatic != null) mockedStatic.close();
     }
+    
+    @Test
+    void envVarConstructor_shouldReturnFalseWhenEnvMissing() throws Exception {
+        HealthCheckService service = new HealthCheckService();
+        // environment variables not set -> should return false
+        assertFalse(service.checkConnection());
+    }
 
     @Test
     void shouldReturnFalseIfAnyConfigIsNull() throws Exception {
