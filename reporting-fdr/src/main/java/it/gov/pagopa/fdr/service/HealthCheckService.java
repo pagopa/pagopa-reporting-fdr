@@ -2,6 +2,7 @@ package it.gov.pagopa.fdr.service;
 
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
+import org.apache.commons.lang3.StringUtils;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
@@ -31,7 +32,7 @@ public class HealthCheckService {
 
     public boolean checkConnection() throws URISyntaxException, StorageException, InvalidKeyException {
 
-        if (isBlank(storageConnectionString) || isBlank(containerBlobInName) || isBlank(containerBlobOutName)) {
+        if (StringUtils.isBlank(storageConnectionString) || StringUtils.isBlank(containerBlobInName) || StringUtils.isBlank(containerBlobOutName)) {
             return false;
         }
 
@@ -42,9 +43,5 @@ public class HealthCheckService {
             storageAccount.createCloudBlobClient().getContainerReference(containerBlobOutName);
 
         return containerBlobIn.exists() && containerBlobOut.exists();
-    }
-
-    private static boolean isBlank(String s) {
-        return s == null || s.trim().isEmpty();
     }
 }
