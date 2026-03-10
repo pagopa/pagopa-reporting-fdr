@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.gov.pagopa.fdr</groupId>
@@ -12,14 +14,17 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <azure.functions.maven.plugin.version>1.12.0</azure.functions.maven.plugin.version>
-        <azure.functions.java.library.version>1.4.2</azure.functions.java.library.version>
-        <azure.storage.blob.version>12.13.0</azure.storage.blob.version>
+        <azure.functions.maven.plugin.version>1.40.0</azure.functions.maven.plugin.version>
+        <azure.functions.java.library.version>3.2.3</azure.functions.java.library.version>
+        <azure.storage.blob.version>12.33.2</azure.storage.blob.version>
         <azure.storage.version>8.6.6</azure.storage.version>
         <azure.storage.ehub.version>5.7.0</azure.storage.ehub.version>
         <resteasy.version>3.15.1.Final</resteasy.version>
         <functionAppName>reporting-fdr-20210712115055634</functionAppName>
+        <slf4j.version>1.7.36</slf4j.version>
+        <logback.version>1.2.13</logback.version>
     </properties>
+
 
     <dependencies>
 
@@ -119,7 +124,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.16</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
@@ -132,6 +137,13 @@
             <artifactId>janino</artifactId>
             <version>2.6.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
         <!-- Util END-->
 
         <!-- Jackson START-->
@@ -192,10 +204,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.11.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <release>${java.version}</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
@@ -210,6 +221,10 @@
                         <property>
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
+                        </property>
+                        <property>
+                            <name>FUNCTIONS_WORKER_RUNTIME</name>
+                            <value>java</value>
                         </property>
                     </appSettings>
                 </configuration>
