@@ -39,6 +39,9 @@ var dataOraFlusso = new Date().addDays(0);
 
 istitutoMittente="AGID_01"
 
+const identificativoDominio = process.env.IDENTIFICATIVO_DOMINIO || "77777777777"; // ente creditore destinatario
+
+// identificativoFlusso deve rispettare il formato <YYYY-MM-DD><istitutoMittente>-<flusso> (max 35 caratteri)
 identificativoFlusso = `${dataRegolamento}${istitutoMittente}-S${makeid(9)}`;
 
 const NUM_PAYMENTS = process.env.NUM_PAYMENTS || 100; // default 100 payments
@@ -48,7 +51,7 @@ xmlFlusso = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                     <versioneOggetto>1.0</versioneOggetto>
                     <identificativoFlusso>${identificativoFlusso}</identificativoFlusso>
                     <dataOraFlusso>${dataOraFlusso.toISOString().split('.')[0]}</dataOraFlusso>
-                    <identificativoUnivocoRegolamento>Bonifico SEPA-${makeid(5)}-77777777777</identificativoUnivocoRegolamento>
+                    <identificativoUnivocoRegolamento>Bonifico SEPA-${makeid(5)}-${identificativoDominio}</identificativoUnivocoRegolamento>
                     <dataRegolamento>${dataRegolamento}</dataRegolamento>
                     <istitutoMittente>
                         <identificativoUnivocoMittente>
@@ -60,7 +63,7 @@ xmlFlusso = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                     <istitutoRicevente>
                         <identificativoUnivocoRicevente>
                             <tipoIdentificativoUnivoco>G</tipoIdentificativoUnivoco>
-                            <codiceIdentificativoUnivoco>77777777777</codiceIdentificativoUnivoco>
+                            <codiceIdentificativoUnivoco>${identificativoDominio}</codiceIdentificativoUnivoco>
                         </identificativoUnivocoRicevente>
                         <denominazioneRicevente>AGSM ENERGIA S.R.L. SOCIETA' UNIPERSONAL E</denominazioneRicevente>
                     </istitutoRicevente>
@@ -84,7 +87,7 @@ nodoInviaFlussoRendicontazione=`
     <identificativoIntermediarioPSP>97735020584</identificativoIntermediarioPSP>
     <identificativoCanale>97735020584_03</identificativoCanale>
     <password>pwd_AgID</password>
-    <identificativoDominio>77777777777</identificativoDominio>
+    <identificativoDominio>${identificativoDominio}</identificativoDominio>
     <identificativoFlusso>${identificativoFlusso}</identificativoFlusso>
     <dataOraFlusso>${dataOraFlusso.toISOString().split('.')[0]}</dataOraFlusso>
     <xmlRendicontazione>${xmlFlusso}</xmlRendicontazione>
@@ -93,7 +96,7 @@ nodoInviaFlussoRendicontazione=`
 </soap:Envelope>
 `
 //console.log(nodoInviaFlussoRendicontazione);
-let nomeFile=`${NUM_PAYMENTS}-${identificativoFlusso}.xml`
+let nomeFile=`${NUM_PAYMENTS}-${identificativoDominio}-${identificativoFlusso}.xml`
 require("fs").writeFileSync(nomeFile, nodoInviaFlussoRendicontazione);
 console.log(nomeFile)
 // only for local debug use
